@@ -103,5 +103,3 @@ class Power(Operation):
     
     def partial_b(self):
         return (self.a.data ** self.b.data) * math.log(self.a.data)
-
-"xxx"
