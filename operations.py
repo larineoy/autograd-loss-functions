@@ -1,5 +1,8 @@
 import math
 class Operation(object):
+    """ All `Operations` represent two-variable mathematical functions, e.g. +,-,*,/,** 
+        __call__ accepts two `Number` objects, and returns a Python-numeric result (int, float)
+    """
     def partial_a(self):
         """ Computes the partial derivative of this operation with respect to a: d(op)/da"""
         raise NotImplementedError
@@ -15,7 +18,15 @@ class Operation(object):
     def backprop(self, grad):
         """ Calls .backprop for self.a and self.b, passing to it dF/da and
             dF/db, respectively, where F represents the terminal `Number`-instance node 
-            in the computational graph, which originally invoked `F.backprop().             
+            in the computational graph, which originally invoked `F.backprop().
+             
+            (In short: F is the variable with respect to which all of the partial derivatives 
+            are being computed, for this back propagation)
+            
+            Parameters
+            ----------
+            grad : Union[int, float]
+                dF/d(op) - The partial derivative of F with respect to the output of this operation.
             """
         self.a.backprop(self.partial_a() * grad)  # backprop: dF/d(op)*d(op)/da -> dF/da
         self.b.backprop(self.partial_b() * grad)
@@ -30,6 +41,16 @@ class Add(Operation):
     def __repr__(self): return "+"
 
     def __call__(self, a, b):
+        """ Adds two `Number` instances.
+            
+            Parameters
+            ----------
+            a : Number
+            b : Number
+            
+            Returns
+            -------
+            Union[int, float] """
         self.a = a
         self.b = b
         return a.data + b.data
@@ -47,6 +68,16 @@ class Multiply(Operation):
     def __repr__(self): return "*"
 
     def __call__(self, a, b):
+        """ Nultiplies two `Number` instances.
+            
+            Parameters
+            ----------
+            a : Number
+            b : Number
+            
+            Returns
+            -------
+            Union[int, float] """
         self.a = a
         self.b = b
         return a.data * b.data
@@ -75,6 +106,10 @@ class Subtract(Operation):
     def partial_b(self):
         return -1
     
+"""
+def backprop(self):
+        xx
+"""
 class Divide(Operation):
     def __repr__(self): return "/"
 
